@@ -1,0 +1,14 @@
+<!-- templates/orders/list.html -->
+{% extends "base.html" %}{% block content %}
+<h3>My Orders</h3>
+<table class="table">
+  <thead><tr><th>ID</th><th>Date</th><th>Status</th><th>Total</th></tr></thead>
+  <tbody>
+  {% for o in orders %}
+    <tr><td>{{ o.id }}</td><td>{{ o.created_at }}</td><td>{{ o.status }}</td><td>₹ {{ o.total }}</td></tr>
+  {% empty %}
+    <tr><td colspan="4">No orders yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

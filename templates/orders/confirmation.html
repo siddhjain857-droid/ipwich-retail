@@ -1,0 +1,6 @@
+<!-- templates/orders/confirmation.html -->
+{% extends "base.html" %}{% block content %}
+<h3>Order #{{ order.id }} placed!</h3>
+<p>Status: <span class="badge bg-info">{{ order.status }}</span></p>
+<a href="/orders/">View my orders</a>
+{% endblock %}

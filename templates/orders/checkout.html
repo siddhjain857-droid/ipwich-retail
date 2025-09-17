@@ -1,0 +1,18 @@
+<!-- templates/orders/checkout.html -->
+{% extends "base.html" %}{% block content %}
+<h3>Checkout</h3>
+<ul class="list-group mb-3">
+  {% for p, qty in items %}
+    <li class="list-group-item d-flex justify-content-between">
+      <div>{{ p.name }} × {{ qty }}</div>
+      <span>₹ {{ p.price|floatformat:2 }}</span>
+    </li>
+  {% endfor %}
+  <li class="list-group-item d-flex justify-content-between">
+    <strong>Total</strong><strong>₹ {{ total|floatformat:2 }}</strong>
+  </li>
+</ul>
+<form method="post">{% csrf_token %}
+  <button class="btn btn-primary">Place order</button>
+</form>
+{% endblock %}
