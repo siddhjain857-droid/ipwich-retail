@@ -1,0 +1,39 @@
+<!-- templates/catalog/home.html -->
+{% extends "base.html" %}{% block content %}
+<div class="d-flex align-items-center mb-3">
+  <h3 class="me-3">Products</h3>
+  <div class="ms-auto">
+    <form method="get" class="d-flex">
+      <select name="category" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+        <option value="">All</option>
+        {% for c in categories %}
+          <option value="{{c.name}}" {% if active == c.name %}selected{% endif %}>{{c.name}}</option>
+        {% endfor %}
+      </select>
+      <noscript><button class="btn btn-sm btn-primary">Filter</button></noscript>
+    </form>
+  </div>
+</div>
+<div class="row">
+  {% for p in products %}
+    <div class="col-md-4 mb-3">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ p.name }}</h5>
+          <p class="card-text text-muted mb-2">{{ p.description|truncatechars:120 }}</p>
+          <div class="d-flex justify-content-between">
+            <span>₹ {{ p.price }}</span>
+            {% if p.in_stock %}<span class="badge bg-success">In stock</span>
+            {% else %}<span class="badge bg-secondary">Out of stock</span>{% endif %}
+          </div>
+        </div>
+        <div class="card-footer bg-white">
+          <a href="{% url 'product_detail' p.pk %}" class="btn btn-sm btn-primary w-100">View</a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No products found.</p>
+  {% endfor %}
+</div>
+{% endblock %}
