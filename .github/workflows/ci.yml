@@ -22,6 +22,6 @@ jobs:
       - run: black --check .
       - run: bandit -r .
       - run: coverage run -m pytest -q && coverage xml
-      - uses: codecov/codecov-action@v4
-        if: always()
-        with: { token: ${{ secrets.CODECOV_TOKEN }} }
+      # - uses: codecov/codecov-action@v4
+      #   if: always()
+      #   with: { token: ${{ secrets.CODECOV_TOKEN }} }
