@@ -1,0 +1,33 @@
+name: uptime
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # every 15 minutes
+  workflow_dispatch:         # allow manual run
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Curl /healthz
+        env:
+          APP_URL: ${{ secrets.RENDER_APP_URL }}   # set this secret in GitHub → Settings → Secrets
+        run: |
+          ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          echo "[$ts] Probing $APP_URL/healthz"
+
+          # 1) ensure HTTP 200
+          curl -fsS "$APP_URL/healthz" -o resp.json
+
+          # 2) ensure body contains "ok"
+          grep -qi '"status"\s*:\s*"ok"' resp.json
+
+          echo "OK $(cat resp.json)"
+
+      - name: Upload probe response (artifact)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: uptime-response
+          path: resp.json
