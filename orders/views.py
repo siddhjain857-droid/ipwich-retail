@@ -1,77 +1,3 @@
-# # orders/views.py
-# from django.shortcuts import render, redirect, get_object_or_404
-# from django.contrib.auth.decorators import login_required
-# from decimal import Decimal
-# from catalog.models import Product
-# from .models import Order, OrderItem, OrderShippingInfo
-# from django.db import transaction
-# from .forms import CheckoutForm
-
-# CART_KEY = "cart"
-
-# @login_required
-# def checkout(request):
-#     cart = request.session.get(CART_KEY, {})
-#     if not cart: 
-#         return redirect("cart")
-    
-#     items = []
-#     total = Decimal("0.00")
-#     for pid, qty in cart.items():
-#         qty = max(1, int(qty))
-#         prod = get_object_or_404(Product, pk=int(pid))
-#         line_total = prod.price * qty
-#         items.append({"product": prod, "qty": qty, "line_total": line_total})
-#         total += line_total
-
-#     if request.method == "POST":
-#         # All-or-nothing: create order + items + stock decrement atomically
-#         with transaction.atomic():
-#             order = Order.objects.create(
-#                 user=request.user,
-#                 total=Decimal("0.00"),   # set after we add items
-#                 status="pending",
-#             )
-
-#             running_total = Decimal("0.00")
-
-#             for row in items:
-#                 p = row["product"]
-#                 qty = row["qty"]
-
-#                 OrderItem.objects.create(
-#                     order=order,
-#                     product=p,
-#                     quantity=qty,
-#                     price_each=p.price,
-#                 )
-#                 running_total += p.price * qty
-
-#                 # Decrement stock (don’t go negative)
-#                 p.stock = max(0, p.stock - qty)
-#                 p.save(update_fields=["stock"])
-
-#             # Finalize order total
-#             order.total = running_total
-#             order.save(update_fields=["total"])
-
-#             # Clear cart
-#             request.session[CART_KEY] = {}
-
-#         return redirect("order_confirmation", order_id=order.id)
-
-#     return render(request, "orders/checkout.html", {"items": items, "total": total})
-
-# @login_required
-# def confirmation(request, order_id):
-#     order = get_object_or_404(Order, pk=order_id, user=request.user)
-#     return render(request, "orders/confirmation.html", {"order": order})
-
-# @login_required
-# def my_orders(request):
-#     orders = Order.objects.filter(user=request.user).order_by("-created_at")
-#     return render(request, "orders/list.html", {"orders": orders})
-
 # orders/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -81,6 +7,9 @@ from decimal import Decimal
 from catalog.models import Product
 from .models import Order, OrderItem, OrderShippingInfo
 from .forms import CheckoutForm
+import logging
+
+logger = logging.getLogger(__name__)
 
 CART_KEY = "cart"
 
@@ -137,6 +66,17 @@ def checkout(request):
                 # Finalize order total
                 order.total = running_total
                 order.save(update_fields=["total"])
+
+                # ✅ Add this logging
+                logger.info(
+                    "order.created",
+                    extra={
+                        "order_id": order.id,
+                        "user_id": request.user.id,
+                        "total": float(order.total),
+                        "item_count": len(items),
+                    },
+                )
 
                 # Clear cart
                 request.session[CART_KEY] = {}

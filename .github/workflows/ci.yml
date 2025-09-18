@@ -25,3 +25,13 @@ jobs:
       # - uses: codecov/codecov-action@v4
       #   if: always()
       #   with: { token: ${{ secrets.CODECOV_TOKEN }} }
+
+  deploy_smoke:
+    if: github.ref == 'refs/heads/main'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Smoke check /healthz
+        env:
+          APP_URL: ${{ secrets.RENDER_APP_URL }}   # e.g. https://ipswich-retail.onrender.com
+        run: curl -fsS "$APP_URL/healthz"

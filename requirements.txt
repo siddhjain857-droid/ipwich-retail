@@ -11,3 +11,4 @@ coverage
 ruff
 black
 bandit
+django-prometheus

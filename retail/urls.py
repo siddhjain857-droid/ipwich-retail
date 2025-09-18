@@ -28,5 +28,6 @@ urlpatterns = [
     path("cart/", include("cart.urls")),
     path("orders/", include("orders.urls")),
     path("users/", include("users.urls")),
+    path("", include("django_prometheus.urls")),
     path("healthz/", healthz, name="healthz"),
 ]
