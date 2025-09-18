@@ -73,7 +73,7 @@ TEMPLATES = [
 # Static and Template settings
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"  # Use in production for static file collection
+STATIC_ROOT = BASE_DIR / "static"  # Use in production for static file collection
 TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']  # Add the "templates" directory
 
 # For user-uploaded files (e.g., profile images)
