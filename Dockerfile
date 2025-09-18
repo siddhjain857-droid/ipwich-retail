@@ -9,3 +9,11 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 ENV GIT_SHA=local
 CMD ["gunicorn","retail.wsgi:application","--bind","0.0.0.0:8000"]
+# copy entrypoint
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+# comment out previous CMD if present:
+# CMD ["gunicorn", "retail.wsgi:application", "--bind", "0.0.0.0:8000"]
+
+ENTRYPOINT ["/app/entrypoint.sh"]
