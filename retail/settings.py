@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
 DEBUG = os.getenv("DEBUG", "True") == "True"  
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1", "render.com").split(",")
 
 
 # Application definition
@@ -75,6 +75,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"  # Use in production for static file collection
 TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']  # Add the "templates" directory
+
+# For user-uploaded files (e.g., profile images)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 WSGI_APPLICATION = 'retail.wsgi.application'
