@@ -1,0 +1,11 @@
+<a href="/">← Back</a>
+
+<h1>{{ product.name }}</h1>
+<p>{{ product.description }}</p>
+<p>£{{ product.price }}</p>
+
+<form method="post" action="{% url 'add_to_cart' product.pk %}">
+  {% csrf_token %}
+  <input type="number" name="qty" value="1" min="1">
+  <button type="submit">Add to Cart</button>
+</form>

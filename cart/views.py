@@ -32,3 +32,11 @@ def view_cart(request):
         total += line["line_total"]
         items.append(line)
     return render(request, "cart/cart.html", {"items": items, "total": total})
+
+def update_cart(request, product_id):  # optional, if you want quantity update on the cart page
+    qty = max(1, int(request.POST.get("qty", 1)))
+    cart = request.session.get(CART_KEY, {})
+    if str(product_id) in cart:
+        cart[str(product_id)] = qty
+    request.session[CART_KEY] = cart
+    return redirect("cart")

@@ -1,0 +1,23 @@
+<h1>Your Cart</h1>
+<table>
+<tr><th>Product</th><th>Qty</th><th>Price</th><th>Line</th><th></th></tr>
+{% for r in rows %}
+<tr>
+<td><a href="{% url 'detail' r.p.pk %}">{{ r.p.name }}</a></td>
+<td>
+<form method="post" action="{% url 'update_cart' r.p.pk %}">
+{% csrf_token %}
+<input type="number" name="qty" min="1" value="{{ r.qty }}" />
+<button type="submit">Update</button>
+</form>
+</td>
+<td>£{{ r.p.price }}</td>
+<td>£{{ r.line_total|floatformat:2 }}</td>
+<td><a href="{% url 'remove_from_cart' r.p.pk %}">Remove</a></td>
+</tr>
+{% empty %}
+<tr><td colspan="5">Your cart is empty.</td></tr>
+{% endfor %}
+</table>
+<p><strong>Total: £{{ total }}</strong></p>
+<a href="{% url 'checkout' %}">Proceed to Checkout</a>

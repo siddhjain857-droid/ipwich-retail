@@ -13,3 +13,11 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     quantity = models.PositiveIntegerField()
     price_each = models.DecimalField(max_digits=8, decimal_places=2)
+
+class OrderShippingInfo(models.Model):
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name="shipping")
+    email = models.EmailField()
+    full_name = models.CharField(max_length=120)
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=120)
+    postal_code = models.CharField(max_length=20)

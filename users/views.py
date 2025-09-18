@@ -14,4 +14,4 @@ def signup(request):
             return redirect('home')  # Redirect to homepage or any other page
     else:
         form = UserRegistrationForm()
-    return render(request, 'users/signup.html', {'form': form})
+    return render(request, 'registration/signup.html', {'form': form})

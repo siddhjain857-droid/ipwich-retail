@@ -1,0 +1,13 @@
+{% for product in products %}
+  <div class="card">
+    <h3>{{ product.name }}</h3>
+    <p>£{{ product.price }}</p>
+    <form method="post" action="{% url 'add_to_cart' product.pk %}">
+      {% csrf_token %}
+      <input type="hidden" name="qty" value="1">
+      <button type="submit">Add to Cart</button>
+    </form>
+  </div>
+{% empty %}
+  <p>No products available.</p>
+{% endfor %}

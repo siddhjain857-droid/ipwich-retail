@@ -42,6 +42,11 @@ INSTALLED_APPS = [
     'users',     # Add the users app here
 ]
 
+# Auth redirects
+LOGIN_URL = "/users/login/"          # where @login_required redirects
+LOGIN_REDIRECT_URL = "home"          # after successful login
+LOGOUT_REDIRECT_URL = "home"         # after logout
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -73,13 +78,12 @@ TEMPLATES = [
 # Static and Template settings
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "static"  # Use in production for static file collection
+STATIC_ROOT = BASE_DIR / "staticfiles"  # Use in production for static file collection
 TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']  # Add the "templates" directory
 
 # For user-uploaded files (e.g., profile images)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
 
 WSGI_APPLICATION = 'retail.wsgi.application'
 
